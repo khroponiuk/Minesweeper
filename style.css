@@ -1,5 +1,5 @@
 .minesweeper-form {
-    margin: 0 auto;
+
 }
 
 .game-wrapper {
@@ -8,7 +8,7 @@
 
 .game-wrapper table {
     margin: 0 auto;
-    border-spacing: 4px;
+    border-spacing: 3px;
     border-collapse: separate;
 }
 
@@ -19,11 +19,28 @@
     text-align: center;
     border-radius: 3px;
     cursor: pointer;
+    font-weight: bold;
 }
 
 .game-wrapper td:hover {
     transform: scale(1.05, 1.05);
 }
+
+.game-wrapper td.flag:after {
+    content: "\2691";
+}
+
+.game-wrapper td.mine:after {
+    content: "\1F4A3";
+}
+
+.light-blue { color: #183f7f; }
+.light-red { color: #962121; }
+.light-green { color: #3a9667; }
+.dark-blue { color: #012c72; }
+.dark-red { color: #7c0606; }
+.dark-green { color: #004722; }
+
 
 /* --- Additional classes --- */
 .noselect {

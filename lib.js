@@ -1,30 +1,47 @@
-    class CellClickHandler{
-        constructor(){
-            this._strategy;
-        }
+function Cell(row, col, isOpen, isMine, bombsAround){
+    this.row = row;
+    this.col = col;
+    this.isOpen = isOpen;
+    this.isMine = isMine;
+    this.bombsAround = bombsAround || 0;
+}
 
-        setStrategy(strategy) {
-            this._strategy = strategy;
-        }
+function rand(max) {
+    return Math.floor(Math.random() * max);
+}
 
-        execute(cell, minesweeper){
-            this._strategy.execute(cell, minesweeper);
-        }
+function toggleClass(element, className) {
+    if(element.classList.contains(className)){
+        element.classList.remove(className);
+    } else{
+        element.classList.add(className);
     }
+}
 
-    class CellClickBeforeInit{
-        execute(cell, minesweeper){
-            var cellLocation = {
-                row: cell.parentElement.rowIndex,
-                col: cell.cellIndex
-            };
-            minesweeper.init(cellLocation);
-            cellClickHandler.setStrategy(new CellClickAfterInit(cell, minesweeper));
+var print = function(matrix){
+    for(var i = 0; i < matrix.length; i++){
+        var row = matrix[i];
+        var str = '[ _ ';
+        for(var j = 0; j < row.length; j++){
+            str += (row[j].isMine == true ? 'X' : 0) + ' _ ';
         }
+        str += ']';
+        console.log(str);
     }
-    
-    class CellClickAfterInit{
-        execute(cell, minesweeper){
-            
+}
+
+var printAdvanced = function(matrix){
+    for(var i = 0; i < matrix.length; i++){
+        var row = matrix[i];
+        var str = '[ _ ';
+        for(var j = 0; j < row.length; j++){
+            if(row[j].isMine){
+                str += 'X _ ';
+            }else{
+                str += row[j].bombsAround + ' _ ';
+            }
         }
+        str += ']';
+        console.log(str);
     }
+}
