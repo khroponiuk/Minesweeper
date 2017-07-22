@@ -58,6 +58,7 @@
 .game-wrapper td.open {
     background-color: #ECEBE9;
 }
+
 .game-wrapper td:hover {
     transform: scale(1.05, 1.05);
 }

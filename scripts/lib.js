@@ -17,31 +17,3 @@ function toggleClass(element, className) {
         element.classList.add(className);
     }
 }
-
-var print = function(matrix){
-    for(var i = 0; i < matrix.length; i++){
-        var row = matrix[i];
-        var str = '[ _ ';
-        for(var j = 0; j < row.length; j++){
-            str += (row[j].isMine == true ? 'X' : 0) + ' _ ';
-        }
-        str += ']';
-        console.log(str);
-    }
-}
-
-var printAdvanced = function(matrix){
-    for(var i = 0; i < matrix.length; i++){
-        var row = matrix[i];
-        var str = '[ _ ';
-        for(var j = 0; j < row.length; j++){
-            if(row[j].isMine){
-                str += 'X _ ';
-            }else{
-                str += row[j].bombsAround + ' _ ';
-            }
-        }
-        str += ']';
-        console.log(str);
-    }
-}

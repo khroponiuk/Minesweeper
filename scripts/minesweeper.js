@@ -20,9 +20,9 @@ var Minesweeper = (function(){
         var header = document.createElement('h3');
         header.textContent = 'Minesweeper init form';
 
-        var colsInput = _generateInput('number', 'number-of-rows', 'Rows', 0, 100, 'Rows number');
-        var rowsInput = _generateInput('number', 'number-of-cols', 'Cols', 0, 100, 'Cols number');
-        var bombsInput = _generateInput('number', 'number-of-bombs', 'Bombs', 0, 100, 'Bombs number');
+        var colsInput = _generateInput('number', 'number-of-rows', 'Rows', 9, 100, 'Rows number', 9);
+        var rowsInput = _generateInput('number', 'number-of-cols', 'Cols', 9, 100, 'Cols number', 9);
+        var bombsInput = _generateInput('number', 'number-of-bombs', 'Bombs', 10, 100, 'Bombs number', 10);
 
         var submitBtn = document.createElement('input');
         submitBtn.setAttribute('type', 'submit');
@@ -53,7 +53,7 @@ var Minesweeper = (function(){
         _initProperties(rows, cols, bombs, '.game-wrapper');
     }
 
-    function _generateInput(type, name, labelText, minValue, maxValue, placeholder){
+    function _generateInput(type, name, labelText, minValue, maxValue, placeholder, value){
         var label = document.createElement('label');
         label.textContent = labelText;
 
@@ -63,6 +63,7 @@ var Minesweeper = (function(){
         input.setAttribute('min', minValue);
         input.setAttribute('max', maxValue);
         input.setAttribute('placeholder', placeholder);
+        input.setAttribute('value', value);
 
         label.appendChild(input);
 
@@ -74,6 +75,7 @@ var Minesweeper = (function(){
         colsNumber = parseInt(cols) || 0;
         bombsNumber = bombsLeftCounter = parseInt(bombs) || 0;
         gameWrapper = document.querySelector(gameSelector);
+        bombsLeftCounter = bombsNumber;
         openedCellsNumber = 0;
 
         _createEmptyMatrix();
@@ -234,11 +236,16 @@ var Minesweeper = (function(){
                     matrix[i][j].isOpen = true;
                     openedCellsNumber++;
 
-                    table.rows[i].cells[j].classList.remove('flag');
+                    if(table.rows[i].cells[j].classList.contains('flag')){
+                        table.rows[i].cells[j].classList.remove('flag');
+                        bombsLeftCounter++;
+                        _updateBombsLeftCounter();
+                    }
                     table.rows[i].cells[j].classList.add('open');
 
                     var value = matrix[i][j].bombsAround === 0 ? '' : matrix[i][j].bombsAround;
                     table.rows[i].cells[j].textContent = value;
+
 
                     if(matrix[i][j].bombsAround === 0){
                         _openCellsAround(matrix[i][j]);
@@ -250,16 +257,28 @@ var Minesweeper = (function(){
 
     function _checkGameForEnd(){
         if(openedCellsNumber === rowsNumber * colsNumber - bombsNumber){
-            alert('You won :)');
+            setTimeout(function() {
+                alert('You won! :)');
+                _newGame();
+            }, 0); 
         }
     }
 
     function _loseGame(cell){
         _showMines();
         table.rows[cell.row].cells[cell.col].classList.add('red-mine');
+
+        table.removeEventListener('click', _standartClickHandler);
+
         setTimeout(function() {
             alert('Booom :(');
+            _newGame();
         }, 0); 
+    }
+
+    function _newGame(){
+        gameWrapper.innerHTML = '';
+        init();
     }
 
     function _showMines(){
@@ -302,17 +321,13 @@ var Minesweeper = (function(){
         return [startRow, startCol, endRow, endCol];
     }
 
-    function _setFirstClickEventHandler(){
-        table.removeEventListener('click', _standartClickHandler);
-        table.addEventListener('click', _firstClickHandler);
-    }
-
     function _setStandartClickEventHandler(){
         table.removeEventListener('click', _firstClickHandler);
         table.addEventListener('click', _standartClickHandler);
     }
 
     return {
-        init: init
+        init: init,
+        showMines: _showMines
     };
 })();
